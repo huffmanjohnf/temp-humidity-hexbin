@@ -1,1 +1,1 @@
-# temp-himidity-hexbin
+# temp-humidity-hexbin
