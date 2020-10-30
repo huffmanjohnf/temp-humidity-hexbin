@@ -9,7 +9,7 @@ import streamlit as st
 @st.cache
 def load_data(file_data: io.StringIO):
     file_data.seek(0)
-    return pd.read_csv(file_data, usecols=[0, 1])
+    return pd.read_csv(file_data, usecols=["DateTime", "RawValue"])
 
 
 def preprocess(df: pd.DataFrame):
@@ -26,11 +26,12 @@ def join(dfs: List[pd.DataFrame]):
     return df.dropna(axis=0)
 
 
-def rh2dp(df: pd.DataFrame):
-    rh = df["Humidity"]
-    tc = (df["Temperature"] - 32) / 1.8  # convert to Celcius
-    rh = np.maximum(0.2, rh / 100)
-    lrh = np.log(rh)
-    dp_Celcius = 243.04 * (lrh + ((17.625 * tc) / (243.04 + tc))) / (17.625 - lrh - ((17.625 * tc) / (243.04 + tc)))
-    df["Humidity"] = (1.8 * dp_Celcius) + 32
-    return df
+def rh2dp(tf: float = 72.0, rh: float = 55.0) -> float:
+    t_c = (tf - 32) / 1.8  # convert to Celcius
+
+    rh = max([0.2, (rh / 100)])
+    ln_rh = np.log(rh)
+    dp_c = 243.04 * (ln_rh + ((17.625 * t_c) / (243.04 + t_c))) / (17.625 - ln_rh - ((17.625 * t_c) / (243.04 + t_c)))
+
+    dp_f = (1.8 * dp_c) + 32  # convert to Fahrenheit
+    return dp_f

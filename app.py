@@ -17,7 +17,7 @@ df_h = load_data(humidity_file).rename(columns={"RawValue": "Humidity"})
 
 df = join(dfs=[df_t, df_h])
 if humidity_type == "Relative Humidity":
-    df = rh2dp(df)
+    df["Humidity"] = [rh2dp(row["Temperature"], row["Humidity"]) for _, row in df.iterrows()]
 
 hexbin = hexbin_plt(df)
 st.pyplot(hexbin)
