@@ -15,9 +15,17 @@ if not humidity_file or not humidity_file or humidity_type == "Select":
 df_t = load_data(temperature_file).rename(columns={"RawValue": "Temperature"})
 df_h = load_data(humidity_file).rename(columns={"RawValue": "Humidity"})
 
-df = join(dfs=[df_t, df_h])
-if humidity_type == "Relative Humidity":
-    df["Humidity"] = [rh2dp(row["Temperature"], row["Humidity"]) for _, row in df.iterrows()]
+col1, col2 = st.beta_columns(2)
 
-hexbin = hexbin_plt(df)
-st.pyplot(hexbin)
+with col1:
+    sp_heat = st.slider("Heating Set Point (\N{DEGREE SIGN}F)", 64.0, 72.0, 68.0, 0.5)
+    sp_cool = st.slider("Cooling Set Point (\N{DEGREE SIGN}F)", 68.0, 76.0, 72.0, 0.5)
+    sp_humi = st.slider("Humidity Set Point (Dew Point, \N{DEGREE SIGN}F)", 45.0, 65.0, 55.0, 0.5)
+
+with col2:
+    df = join(dfs=[df_t, df_h])
+    if humidity_type == "Relative Humidity":
+        df["Humidity"] = [rh2dp(row["Temperature"], row["Humidity"]) for _, row in df.iterrows()]
+
+    hexbin = hexbin_plt(df, sp_cool, sp_heat, sp_humi)
+    st.pyplot(hexbin)
