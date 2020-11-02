@@ -18,14 +18,29 @@ df_h = load_data(humidity_file).rename(columns={"RawValue": "Humidity"})
 col1, col2 = st.beta_columns(2)
 
 with col1:
-    sp_heat = st.slider("Heating Set Point (\N{DEGREE SIGN}F)", 64.0, 72.0, 68.0, 0.5)
-    sp_cool = st.slider("Cooling Set Point (\N{DEGREE SIGN}F)", 68.0, 76.0, 72.0, 0.5)
-    sp_humi = st.slider("Humidity Set Point (Dew Point, \N{DEGREE SIGN}F)", 45.0, 65.0, 55.0, 0.5)
+    plt_params = {}
+
+    plt_params["sp_heat"] = st.slider("Heating Set Point (\N{DEGREE SIGN}F)", 64.0, 72.0, 68.0, 0.5)
+    plt_params["sp_cool"] = st.slider("Cooling Set Point (\N{DEGREE SIGN}F)", 68.0, 76.0, 72.0, 0.5)
+    plt_params["sp_humi"] = st.slider("Humidity Set Point (Dew Point, \N{DEGREE SIGN}F)", 45.0, 65.0, 55.0, 0.5)
+
+    with st.beta_expander("Overrides"):
+        x_override = st.checkbox("Override X-axis")
+        x1 = st.number_input("X-axis Range", min_value=20, max_value=100, value=64)
+        x2 = st.number_input("", min_value=20, max_value=100, value=76)
+        if x_override:
+            plt_params["xlim"] = (min([x1, x2]), max([x1, x2]))
+
+        y_override = st.checkbox("Override Y-axis")
+        y1 = st.number_input("Y-axis Range", min_value=20, max_value=100, value=45)
+        y2 = st.number_input("", min_value=20, max_value=100, value=65)
+        if y_override:
+            plt_params["ylim"] = (min([y1, y2]), max([y1, y2]))
 
 with col2:
     df = join(dfs=[df_t, df_h])
     if humidity_type == "Relative Humidity":
         df["Humidity"] = [rh2dp(row["Temperature"], row["Humidity"]) for _, row in df.iterrows()]
 
-    hexbin = hexbin_plt(df, sp_cool, sp_heat, sp_humi)
+    hexbin = hexbin_plt(df, **plt_params)
     st.pyplot(hexbin)
