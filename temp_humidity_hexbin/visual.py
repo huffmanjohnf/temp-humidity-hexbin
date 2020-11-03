@@ -39,7 +39,7 @@ def hexbin_plt(
     if not xlim:
         xlim = (find_edge([sp_heat, x_range[0]], "min"), find_edge([sp_cool, x_range[1]], "max"))
     if not ylim:
-        ylim = (y_range[0], find_edge([sp_humi, y_range[1]], "max"))
+        ylim = (find_edge([y_range[0]], "min"), find_edge([sp_humi, y_range[1]], "max"))
 
     hexbin = sns.jointplot(
         x="Temperature",
