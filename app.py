@@ -5,6 +5,9 @@ from temp_humidity_hexbin.visual import hexbin_plt
 
 st.title("Temperature vs. Humidity Hexbin Plot")
 
+st.sidebar.write(
+    "See [README.md](https://github.com/huffmanjohnf/temp-humidity-hexbin/blob/main/README.md) for overview."
+)
 st.sidebar.subheader("Upload data files:")
 temperature_file = st.sidebar.file_uploader("Upload temperature data file", type=["csv"])
 humidity_file = st.sidebar.file_uploader("Upload humidity data file", type=["csv"])
