@@ -41,6 +41,9 @@ def hexbin_plt(
     if not ylim:
         ylim = (find_edge([y_range[0]], "min"), find_edge([sp_humi, y_range[1]], "max"))
 
+    df["Temperature"] = df["Temperature"].clip(*x_range)
+    df["Humidity"] = df["Humidity"].clip(*y_range)
+
     hexbin = sns.jointplot(
         x="Temperature",
         y="Humidity",
