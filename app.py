@@ -29,9 +29,9 @@ col1, col2 = st.beta_columns([2, 3])
 with col1:
     plt_params = {}
 
-    plt_params["sp_heat"] = st.slider("Heating Set Point (\N{DEGREE SIGN}F)", 64.0, 72.0, 68.0, 0.5)
-    plt_params["sp_cool"] = st.slider("Cooling Set Point (\N{DEGREE SIGN}F)", 68.0, 76.0, 72.0, 0.5)
-    plt_params["sp_humi"] = st.slider("Humidity Set Point (Dew Point, \N{DEGREE SIGN}F)", 45.0, 65.0, 55.0, 0.5)
+    plt_params["sp_heat"] = st.slider("Heating Set Point (\N{DEGREE SIGN}F)", 55.0, 95.0, 65.0, 0.5)
+    plt_params["sp_cool"] = st.slider("Cooling Set Point (\N{DEGREE SIGN}F)", 55.0, 95.0, 75.0, 0.5)
+    plt_params["sp_humi"] = st.slider("Humidity Set Point (Dew Point, \N{DEGREE SIGN}F)", 30.0, 90.0, 55.0, 0.5)
 
     with st.beta_expander("Relative Humidity to Dew Point Calculator"):
         t = st.number_input("Temperature (\N{DEGREE SIGN}F)", min_value=20, max_value=100, value=72)
